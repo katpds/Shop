@@ -1,17 +1,21 @@
 ﻿namespace Shop.Web.Controllers
 {
+    using System.Threading.Tasks;
     using Microsoft.AspNetCore.Mvc;
     using Microsoft.EntityFrameworkCore;
-    using Shop.Web.Data;
-    using Shop.Web.Data.Entities;
-    using System.Threading.Tasks;
+    using Data;
+    using Data.Entities;
+    using Helpers;
+
     public class ProductsController : Controller
     {
         private readonly IRepository repository;
+        private readonly IUserHelper userHelper;
 
-        public ProductsController(IRepository repository)
+        public ProductsController(IRepository repository, IUserHelper userHelper)
         {
             this.repository = repository;
+            this.userHelper = userHelper;
         }
 
         // GET: Products
@@ -44,14 +48,15 @@
         }
 
         // POST: Products/Create
-        // To protect from overposting attacks, please enable the specific properties you want to bind to, for 
-        // more details see http://go.microsoft.com/fwlink/?LinkId=317598.
+
         [HttpPost]
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> Create(Product product)
         {
             if (ModelState.IsValid)
             {
+                //TODO: change for the logged user
+                product.User = await this.userHelper.GetUserByEmailAsync("katdpds@gmail.com");
                 this.repository.AddProduct(product);
                 await this.repository.SaveAllAsync();
                 return RedirectToAction(nameof(Index));
@@ -84,6 +89,8 @@
             {
                 try
                 {
+                    //TODO: change for the logged user
+                    product.User = await this.userHelper.GetUserByEmailAsync("katdpds@gmail.com");
                     this.repository.UpdateProduct(product);
                     await this.repository.SaveAllAsync();
                 }
