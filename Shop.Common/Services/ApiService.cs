@@ -1,4 +1,4 @@
-﻿
+﻿    
 
 namespace Shop.Common.Services
 {
@@ -11,7 +11,10 @@ namespace Shop.Common.Services
 
     public class ApiService
     {
-        public async Task<Response> GetListAsync<T>(string urlBase, string servicePrefix, string controller)
+        public async Task<Response> GetListAsync<T>(
+            string urlBase, 
+            string servicePrefix, 
+            string controller)
         {
             try
             {
