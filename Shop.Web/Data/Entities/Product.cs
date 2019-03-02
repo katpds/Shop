@@ -41,7 +41,7 @@ namespace Shop.Web.Data.Entities
                     return null;
                 }
                 return 
-                    $"https://shopwebkatpds.azurewebsites.net/Products{this.ImageUrl.Substring(1)}";
+                    $"https://shopwebkatpds.azurewebsites.net{this.ImageUrl.Substring(1)}";
             }
         }
     }
