@@ -8,5 +8,7 @@
     public interface IOrderRepository : IGenericRepository<Order>
     {
         Task<IQueryable<Order>> GetOrdersAsync(string userName);
+
+        Task<IQueryable<OrderDetailTemp>> GetDetailTempsAsync(string userName);
     }
 }

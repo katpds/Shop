@@ -15,7 +15,7 @@ namespace Shop.Web
     using Microsoft.Extensions.Configuration;
     using Microsoft.Extensions.DependencyInjection;
     using Microsoft.IdentityModel.Tokens;
-    
+    using Shop.Web.Data.Repositories;
 
     public class Startup
     {
@@ -61,9 +61,11 @@ namespace Shop.Web
 
             services.AddTransient<SeedDb>();
 
-            services.AddScoped<IProductRepository, ProductRepository>();
             services.AddScoped<ICountryRepository, CountryRepository>();
+            services.AddScoped<IOrderRepository, OrderRepository>();
+            services.AddScoped<IProductRepository, ProductRepository>();         
             services.AddScoped<IUserHelper, UserHelper>();
+            
 
             services.Configure<CookiePolicyOptions>(options =>
             {
