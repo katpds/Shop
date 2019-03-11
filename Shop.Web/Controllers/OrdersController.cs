@@ -14,7 +14,7 @@
         private readonly IProductRepository productRepository;
 
         public OrdersController(
-            IOrderRepository orderRepository, 
+            IOrderRepository orderRepository,
             IProductRepository productRepository)
         {
             this.orderRepository = orderRepository;
@@ -89,6 +89,18 @@
             await this.orderRepository.ModifyOrderDetailTempQuantityAsync(id.Value, -1);
             return this.RedirectToAction("Create");
         }
+
+        public async Task<IActionResult> ConfirmOrder()
+        {
+            var response = await this.orderRepository.ConfirmOrderAsync(this.User.Identity.Name);
+            if (response)
+            {
+                return this.RedirectToAction("Index");
+            }
+
+            return this.RedirectToAction("Create");
+        }
+
 
     }
 }
