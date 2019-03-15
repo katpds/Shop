@@ -1,11 +1,13 @@
 ﻿namespace Shop.Web.Controllers
 {
+    using System;
+    using System.Threading.Tasks;
     using Microsoft.AspNetCore.Authorization;
     using Microsoft.AspNetCore.Mvc;
     using Shop.Web.Data;
     using Shop.Web.Data.Repositories;
     using Shop.Web.Models;
-    using System.Threading.Tasks;
+    
 
     [Authorize]
     public class OrdersController : Controller
@@ -99,6 +101,40 @@
             }
 
             return this.RedirectToAction("Create");
+        }
+
+        public async Task<IActionResult> Deliver(int? id)
+        {
+            if (id == null)
+            {
+                return NotFound();
+            }
+
+            var order = await this.orderRepository.GetOrdersAsync(id.Value);
+            if (order == null)
+            {
+                return NotFound();
+            }
+
+            var model = new DeliverViewModel
+            {
+                Id = order.Id,
+                DeliveryDate = DateTime.Today
+            };
+
+            return View(model);
+        }
+
+        [HttpPost]
+        public async Task<IActionResult> Deliver(DeliverViewModel model)
+        {
+            if (this.ModelState.IsValid)
+            {
+                await this.orderRepository.DeliverOrder(model);
+                return this.RedirectToAction("Index");
+            }
+
+            return this.View();
         }
 
 
