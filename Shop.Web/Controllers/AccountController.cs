@@ -15,19 +15,22 @@ namespace Shop.Web.Controllers
     using Microsoft.Extensions.Configuration;
     using Microsoft.IdentityModel.Tokens;
     using Models;
-
+    using Shop.Web.Data;
 
     public class AccountController : Controller
     {
         private readonly IUserHelper userHelper;
+        private readonly ICountryRepository countryRepository;
         private readonly IConfiguration configuration;
 
         public AccountController(
             IUserHelper userHelper,
+            ICountryRepository countryRepository,
             IConfiguration configuration
 )
         {
             this.userHelper = userHelper;
+            this.countryRepository = countryRepository;
             this.configuration = configuration;
         }
 
@@ -70,7 +73,13 @@ namespace Shop.Web.Controllers
 
         public IActionResult Register()
         {
-            return this.View();
+            var model = new RegisterNewUserViewModel
+            {
+                Countries = this.countryRepository.GetComboCountries(),
+                Cities = this.countryRepository.GetComboCities(0)
+            };
+
+            return this.View(model);
         }
 
         [HttpPost]
@@ -81,12 +90,19 @@ namespace Shop.Web.Controllers
                 var user = await this.userHelper.GetUserByEmailAsync(model.Username);
                 if (user == null)
                 {
+                    var city = await this.countryRepository.GetCityAsync(model.CityId);
+
                     user = new User
                     {
                         FirstName = model.FirstName,
                         LastName = model.LastName,
                         Email = model.Username,
-                        UserName = model.Username
+                        UserName = model.Username,
+                        Address = model.Address,
+                        PhoneNumber = model.PhoneNumber,
+                        CityId = model.CityId,
+                        City = city
+
                     };
 
                     var result = await this.userHelper.AddUserAsync(user, model.Password);
