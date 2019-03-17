@@ -140,12 +140,30 @@ namespace Shop.Web.Controllers
         {
             var user = await this.userHelper.GetUserByEmailAsync(this.User.Identity.Name);
             var model = new ChangeUserViewModel();
+
             if (user != null)
             {
                 model.FirstName = user.FirstName;
                 model.LastName = user.LastName;
+                model.Address = user.Address;
+                model.PhoneNumber = user.PhoneNumber;
+
+                var city = await this.countryRepository.GetCityAsync(user.CityId);
+                if (city != null)
+                {
+                    var country = await this.countryRepository.GetCountryAsync(city);
+                    if (country != null)
+                    {
+                        model.CountryId = country.Id;
+                        model.Cities = this.countryRepository.GetComboCities(country.Id);
+                        model.Countries = this.countryRepository.GetComboCountries();
+                        model.CityId = user.CityId;
+                    }
+                }
             }
 
+            model.Cities = this.countryRepository.GetComboCities(model.CountryId);
+            model.Countries = this.countryRepository.GetComboCountries();
             return this.View(model);
         }
 
@@ -157,8 +175,15 @@ namespace Shop.Web.Controllers
                 var user = await this.userHelper.GetUserByEmailAsync(this.User.Identity.Name);
                 if (user != null)
                 {
+                    var city = await this.countryRepository.GetCityAsync(model.CityId);
+
                     user.FirstName = model.FirstName;
                     user.LastName = model.LastName;
+                    user.Address = model.Address;
+                    user.PhoneNumber = model.PhoneNumber;
+                    user.CityId = model.CityId;
+                    user.City = city;
+
                     var respose = await this.userHelper.UpdateUserAsync(user);
                     if (respose.Succeeded)
                     {
@@ -177,6 +202,7 @@ namespace Shop.Web.Controllers
 
             return this.View(model);
         }
+
 
         public IActionResult ChangePassword()
         {
@@ -255,6 +281,13 @@ namespace Shop.Web.Controllers
         {
             return this.View();
         }
+
+        public async Task<JsonResult> GetCitiesAsync(int countryId)
+        {
+            var country = await this.countryRepository.GetCountryWithCitiesAsync(countryId);
+            return this.Json(country.Cities.OrderBy(c => c.Name));
+        }
+
 
 
     }
