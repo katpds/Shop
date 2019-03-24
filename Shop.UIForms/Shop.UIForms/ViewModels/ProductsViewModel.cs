@@ -32,10 +32,13 @@ namespace Shop.UIForms.ViewModels
         private async void LoadProducts()
         {
             this.IsRefreshing = true;
+            var url = Application.Current.Resources["UrlAPI"].ToString();
             var response = await this.apiService.GetListAsync<Product>(
-                "https://shopwebkatpds.azurewebsites.net",
+                url,
                 "/api",
-                "/Products");
+                "/Products",
+                "bearer",
+                MainViewModel.GetInstance().Token.Token);
             this.IsRefreshing = false;
 
             if (!response.IsSuccess)
