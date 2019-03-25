@@ -11,11 +11,12 @@ namespace Shop.Common.Services
     using System.Net.Http.Headers;
     using System.Text;
 
+ 
     public class ApiService
     {
         public async Task<Response> GetListAsync<T>(
-            string urlBase, 
-            string servicePrefix, 
+            string urlBase,
+            string servicePrefix,
             string controller)
         {
             try
@@ -24,6 +25,7 @@ namespace Shop.Common.Services
                 {
                     BaseAddress = new Uri(urlBase)
                 };
+
                 var url = $"{servicePrefix}{controller}";
                 var response = await client.GetAsync(url);
                 var result = await response.Content.ReadAsStringAsync();
@@ -117,6 +119,7 @@ namespace Shop.Common.Services
 
                 var url = $"{servicePrefix}{controller}";
                 var response = await client.PostAsync(url, content);
+                //var response = await client.PostAsync(url, content);
                 var result = await response.Content.ReadAsStringAsync();
 
                 if (!response.IsSuccessStatusCode)
@@ -144,7 +147,6 @@ namespace Shop.Common.Services
                 };
             }
         }
-
     }
 
 }

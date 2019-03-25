@@ -1,7 +1,6 @@
-﻿using Shop.Common.Models;
-
-namespace Shop.UIForms.ViewModels
+﻿namespace Shop.UIForms.ViewModels
 {
+    using Shop.Common.Models;
     public class MainViewModel
     {
         private static MainViewModel instance;

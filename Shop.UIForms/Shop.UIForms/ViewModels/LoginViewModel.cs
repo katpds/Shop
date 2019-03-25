@@ -12,7 +12,7 @@
 {
 	private bool isRunning;
     private bool isEnabled;
-    private readonly ApiService apiService; 
+    private ApiService apiService; 
 
     public bool IsRunning
     {
@@ -35,22 +35,26 @@
     public LoginViewModel()
     {
         this.apiService = new ApiService();
-        this.IsEnabled = true;
-        this.Email = "katdpds@gmail.com";
+        this.Email = "reymono@gmail.com";
         this.Password = "123456";
-    }
+        this.IsEnabled = true;
+        }
 
     private async void Login()
     {
         if (string.IsNullOrEmpty(this.Email))
         {
-            await Application.Current.MainPage.DisplayAlert("Error", "You must enter an email.", "Accept");
+            await Application.Current.MainPage.DisplayAlert("Error", 
+                "You must enter an email.", 
+                "Accept");
             return;
         }
 
         if (string.IsNullOrEmpty(this.Password))
         {
-            await Application.Current.MainPage.DisplayAlert("Error", "You must enter a password.", "Accept");
+            await Application.Current.MainPage.DisplayAlert("Error", 
+                "You must enter a password.", 
+                "Accept");
             return;
         }
 
@@ -64,14 +68,15 @@
         };
 
         var url = Application.Current.Resources["UrlAPI"].ToString();
+            
         var response = await this.apiService.GetTokenAsync(
             url,
             "/Account",
             "/CreateToken",
             request);
 
-        this.IsRunning = false;
-        this.IsEnabled = true;
+            this.IsRunning = false;
+            this.IsEnabled = true;
 
         if (!response.IsSuccess)
         {

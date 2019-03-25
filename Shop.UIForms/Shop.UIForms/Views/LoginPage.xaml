@@ -29,7 +29,7 @@
                 	IsRunning="{Binding IsRunning}">
                 </ActivityIndicator>
                 <Button
-                    Command="{Binding LogicCommand}"
+                    Command="{Binding LoginCommand}"
                     IsEnabled="{Binding IsEnabled}"
                     Text="Login">
                 </Button>
