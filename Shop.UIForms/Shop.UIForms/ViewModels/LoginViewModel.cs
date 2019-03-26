@@ -35,7 +35,7 @@
     public LoginViewModel()
     {
         this.apiService = new ApiService();
-        this.Email = "reymono@gmail.com";
+        this.Email = "katdpds@gmail.com";
         this.Password = "123456";
         this.IsEnabled = true;
         }

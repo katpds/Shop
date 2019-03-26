@@ -38,7 +38,7 @@
             {
                 new Menu
                 {
-                    Icon = "ic_info",
+                    Icon = "ic_info_outline",
                     PageName = "AboutPage",
                     Title = "About"
                 },
