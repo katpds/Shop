@@ -119,7 +119,6 @@ namespace Shop.Common.Services
 
                 var url = $"{servicePrefix}{controller}";
                 var response = await client.PostAsync(url, content);
-                //var response = await client.PostAsync(url, content);
                 var result = await response.Content.ReadAsStringAsync();
 
                 if (!response.IsSuccessStatusCode)
